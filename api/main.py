@@ -10,3 +10,6 @@ CORS(app, resources={r"/*": {'origins': 'http://localhost:3000'}})
 @app.route('/')
 def default():
     return "Flask API"
+
+if __name__ == '__main__':
+    app.run(debug=True)
