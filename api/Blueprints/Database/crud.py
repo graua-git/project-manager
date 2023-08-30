@@ -71,6 +71,21 @@ def update(entry: dict, table: str, id: int) -> dict:
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+def delete(query_title: str) -> dict:
+    """
+    DELETE Query
+    query_title: Comment labeling the query in dml.sql
+    returns: list of lists representing table
+    """
+    query = get_query(query_title)
+    try:
+        # Query Database
+        cursor.execute(query)
+        db.commit()
+        return jsonify({'message': str(cursor.rowcount) + " record(s) deleted"}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 def get_query(query_title: str) -> str:
     """
     Gets query from dml.sql
