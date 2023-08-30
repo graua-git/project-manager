@@ -1,3 +1,5 @@
+# General functions to perform CRUD operations on the database
+
 from flask import jsonify
 import mysql.connector
 
@@ -8,6 +10,23 @@ db = mysql.connector.connect(
     database='project_manager'
 )
 cursor = db.cursor(dictionary=True)
+
+# ----------------------------------- CRUD -----------------------------------
+def create(entry: dict, table: str) -> dict:
+    """
+    INSERT INTO Query
+    entry: JSON Object representing row to insert
+    table: table to insert object into
+    returns: response message from MySQL
+    """
+    try:
+        entry_dict = parse_json(entry)
+        sql = f"INSERT INTO {table} " + entry_dict['keys_str'] + " VALUES " + entry_dict['vals_str']
+        cursor.execute(sql, entry_dict['vals_li'])
+        db.commit()
+        return jsonify({'message': "Record updated successfully"}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 def get_query(query_title: str) -> str:
     """
