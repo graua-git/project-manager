@@ -1,15 +1,16 @@
 from flask import Blueprint, request, jsonify
 from pprint import pprint
 
-from Database.crud import read
+from Database.crud import create, read
 
 users_bp = Blueprint('users', __name__)
 
 @users_bp.route('/create-account', methods=['POST'])
 def create_user():
     """
+    Creates user, requires info from json
     """
-    raise NotImplemented
+    return create(request.get_json(), "Users")
 
 @users_bp.route('/read-all', methods=['GET'])
 def read_users():
