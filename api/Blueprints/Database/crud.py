@@ -86,6 +86,30 @@ def delete(query_title: str) -> dict:
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# ----------------------------- Helper Functions -----------------------------
+def parse_json(entry: dict) -> dict:
+    """
+    Parses JSON object into strings to use for queries
+    entry: JSON Object representing row
+    returns: dict
+        keys_str: string representing keys "(key1, key2, key3, ...)"
+        vals_str: string representing values as %s "(%s, %s, %s, ...)"
+        vals_li: list of values [val1, val2, val3, ...]
+    """
+    keys_str, vals_str = "(", "("
+    keys_li, vals_li = [], []
+    for key, val in entry.items():
+        keys_str += key + ", "
+        vals_str += "%s, "
+        vals_li.append(val)
+    keys_str = keys_str[:-2] + ")"
+    vals_str = vals_str[:-2] + ")"
+    return {
+            'keys_str': keys_str, 
+            'vals_str': vals_str,
+            'vals_li': vals_li
+            }
+
 def get_query(query_title: str) -> str:
     """
     Gets query from dml.sql
@@ -106,24 +130,3 @@ def get_query(query_title: str) -> str:
             query_lines.append(line.strip())
 
     return ' '.join(query_lines)[0:-1]
-    
-
-def read(query_title: str, quantity: str = 'all') -> list:
-    """
-    SELECT Query
-    query_title: Comment labeling the query in dml.sql
-    attributes: list of column names (str) in order
-    returns: list of lists representing table
-    quantity: "one" or "all"
-    """
-    query = get_query(query_title)
-    try:
-        # Query Database
-        cursor.execute(query)
-        table = cursor.fetchall()
-        if quantity == "one":
-            return table[0]
-        else:
-            return table
-    except Exception as e:
-            return jsonify({'error': str(e)}), 500
