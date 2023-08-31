@@ -1,12 +1,13 @@
 from flask import Blueprint, request, jsonify
-from pprint import pprint
 
+from Authentication.authentication import generate_token
 from Database.crud import create, read
 
 users_bp = Blueprint('users', __name__)
 
 @users_bp.route('/create-account', methods=['POST'])
 def create_user():
+    
     """
     Creates user, requires info from json
     """
@@ -19,3 +20,25 @@ def read_users():
     user_id | email | first_name | last_name
     """
     return read("Read Users")
+
+@users_bp.route('/login', methods=['POST'])
+def login():
+    """
+    Validates user credentials and generates a token
+    """
+    # Validate User
+    user = request.get_json()
+    sql = f"SELECT user_id FROM Users WHERE email = '{user['email']}' AND password = '{user['password']}'"
+    headers = ['user_id']
+    try:
+        user_id = read(sql, headers, 'one')['user_id']
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    # Generate Token
+    token = generate_token(user_id)
+    return jsonify({'token': token})
+
+@users_bp.route('/update', methods=['POST'])
+def update_user():
+    raise NotImplemented
