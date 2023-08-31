@@ -1,13 +1,12 @@
 from flask import Blueprint, request, jsonify
 
-from Authentication.authentication import generate_token
-from Database.crud import create, read
+from Authentication.authentication import generate_token, validate_token
+from Database.crud import create, read, update, delete
 
 users_bp = Blueprint('users', __name__)
 
 @users_bp.route('/create-account', methods=['POST'])
 def create_user():
-    
     """
     Creates user, requires info from json
     """
@@ -41,4 +40,12 @@ def login():
 
 @users_bp.route('/update', methods=['POST'])
 def update_user():
-    raise NotImplemented
+    # Validate token
+    token_status = validate_token(request)
+    try:
+        user_id = token_status['user_id']
+    except KeyError:
+        return validate_token(request)
+
+    # Query database
+    return update(request.get_json(), "Users", user_id)
