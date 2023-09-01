@@ -2,6 +2,9 @@
 -- Read Users
 SELECT user_id, email, first_name, last_name FROM Users;
 
+-- Delete User
+DELETE FROM Users WHERE user_id = {id};
+
 -- Projects
 -- Read Projects
 SELECT * FROM Projects;
