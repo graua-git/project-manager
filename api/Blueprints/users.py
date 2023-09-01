@@ -20,6 +20,14 @@ def read_users():
     """
     return read("Read Users")
 
+@users_bp.route('/read-one', methods=['GET'])
+def read_users():
+    """
+    Returns the following table
+    user_id | email | first_name | last_name
+    """
+    return read("Read Users", "one")
+
 @users_bp.route('/login', methods=['POST'])
 def login():
     """
@@ -40,6 +48,9 @@ def login():
 
 @users_bp.route('/update', methods=['POST'])
 def update_user():
+    """
+    Updates user with id from token given data from json
+    """
     # Validate token
     token_status = validate_token(request)
     try:
@@ -51,7 +62,10 @@ def update_user():
     return update(request.get_json(), "Users", user_id)
 
 @users_bp.route('/delete', methods=['DELETE'])
-def delete_user(user_id):
+def delete_user():
+    """
+    Deletes user with id from token
+    """
     # Validate token
     token_status = validate_token(request)
     try:
