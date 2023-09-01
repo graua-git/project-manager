@@ -49,3 +49,15 @@ def update_user():
 
     # Query database
     return update(request.get_json(), "Users", user_id)
+
+@users_bp.route('/delete', methods=['DELETE'])
+def delete_user(user_id):
+    # Validate token
+    token_status = validate_token(request)
+    try:
+        user_id = token_status['user_id']
+    except KeyError:
+        return validate_token(request)
+
+    # Query database
+    return delete(request.get_json(), "Users", user_id)
