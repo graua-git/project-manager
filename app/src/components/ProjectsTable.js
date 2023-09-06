@@ -7,10 +7,8 @@ export default function ProjectsTable({projects, removeProject}) {
                 <caption>My Projects</caption>
                 <thead>
                     <tr>
-                        <th>Trip</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Organizer</th>
+                        <th>Project</th>
+                        <th>Creator</th>
                     </tr>
                 </thead>
                 <tbody>

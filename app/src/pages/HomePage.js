@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import ProjectsTable from '../components/ProjectsTable';
 
 export default function Homepage() {
+    const [user, setUser] = useState([]);
     const [greeting, setGreeting] = useState([]);
-    const [trips, setTrips] = useState([]);
+    const [projects, setProjects] = useState([]);
     const token = localStorage.getItem('token');
     
     const loadUser = async () => {
@@ -25,15 +26,15 @@ export default function Homepage() {
                     greeting = ", " + user.first_name;
                 }
                 setGreeting(greeting);
-                loadTrips();
+                loadProjects();
             })
             .catch((error) => {
                 console.error("Error during loading: ", error);
             });
     }
 
-    const loadTrips = async () => {
-        fetch(url['url'] + `/trips/mytrips`, {
+    const loadProjects = async () => {
+        fetch(url['url'] + `/projects/myprojects`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`
@@ -41,13 +42,21 @@ export default function Homepage() {
         })
             .then((response) => response.json())
             .then((data) => {
-                const trips = data;
-                console.log(trips)
-                setTrips(trips);
+                const projects = data;
+                console.log(projects)
+                setProjects(projects);
             })
             .catch((error) => {
                 console.error("Error during loading: ", error);
             });
+    }
+
+    const handleCreateProject =  () => {
+        navigate('/create-project', { replace: true });
+    }
+
+    const removeProject = () => {
+        // ! Not Implemented
     }
 
     useEffect(() => {
@@ -58,8 +67,8 @@ export default function Homepage() {
         <div>
             <h1>Project Manager</h1>
             <h2>Welcome{greeting}</h2>
-            <button onClick={handleCreateTrip}>Create Project</button>
-            <ProjectsTable trips={trips} removeTrip={removeTrip}/>
+            <button onClick={handleCreateProject}>Create Project</button>
+            <ProjectsTable projects={projects} removeProject={removeProject}/>
         </div>
   )
 }
