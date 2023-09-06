@@ -27,7 +27,7 @@ def validate_token(request):
     """
     Validates token from HTTP request
     request: HTTP request
-    returns: int, user_id IF token is valid ELSE dict, message
+    returns: int, user_id IF token is valid ELSE JSON response, message
     """
     token = request.headers.get('Authorization', 'NONE')
     
@@ -37,7 +37,7 @@ def validate_token(request):
 
     try:
         payload = jwt.decode(token, read_key(), algorithms=['HS256'])
-        return jsonify({'user_id': payload.get('user_id')})
+        return {'user_id': payload.get('user_id')}
     except jwt.ExpiredSignatureError:
         return jsonify({'message': 'Token has expired'}), 401
     except jwt.DecodeError:
