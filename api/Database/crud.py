@@ -116,7 +116,7 @@ def get_query(query_title: str) -> str:
     query_title: Comment labeling the query in dml.sql
     returns: query
     """
-    with open("api/Blueprints/Database/dml.sql", 'r') as file:
+    with open("api/Database/dml.sql", 'r') as file:
         lines = file.readlines()
     found = False
     query_lines = []

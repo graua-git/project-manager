@@ -3,7 +3,7 @@ import jwt
 import json
 from datetime import datetime, timedelta
 
-location = 'api/Blueprints/Authentication/key.json'
+location = 'api/Authentication/key.json'
 
 def write_key():
     """
