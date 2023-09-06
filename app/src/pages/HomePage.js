@@ -1,7 +1,7 @@
 import url from '../api.json'
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import ProjectsTable from '../components/TripsTable';
+import ProjectsTable from '../components/ProjectsTable';
 
 export default function Homepage() {
     const [greeting, setGreeting] = useState([]);
