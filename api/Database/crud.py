@@ -28,14 +28,13 @@ def create(entry: dict, table: str) -> dict:
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-def read(query_title: str, quantity: str = 'all') -> list:
+def read(query: str, quantity: str = 'all') -> list:
     """
     SELECT Query
-    query_title: Comment labeling the query in dml.sql
+    query_title: SQL query
     returns: list of lists representing table
     quantity: "one" or "all"
     """
-    query = get_query(query_title)
     try:
         # Query Database
         cursor.execute(query)
@@ -71,13 +70,12 @@ def update(entry: dict, table: str, id: int) -> dict:
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-def delete(query_title: str, id: int) -> dict:
+def delete(query: str, id: int) -> dict:
     """
     DELETE Query
-    query_title: Comment labeling the query in dml.sql
+    query: SQL query
     returns: list of lists representing table
     """
-    query = get_query(query_title)
     try:
         # Query Database
         cursor.execute(query.format(id=id))
@@ -109,24 +107,3 @@ def parse_json(entry: dict) -> dict:
             'vals_str': vals_str,
             'vals_li': vals_li
             }
-
-def get_query(query_title: str) -> str:
-    """
-    Gets query from dml.sql
-    query_title: Comment labeling the query in dml.sql
-    returns: query
-    """
-    with open("api/Database/dml.sql", 'r') as file:
-        lines = file.readlines()
-    found = False
-    query_lines = []
-
-    for line in lines:
-        if query_title in line:
-            found = True
-        elif found and line.strip() == '':
-            break
-        elif found:
-            query_lines.append(line.strip())
-
-    return ' '.join(query_lines)[0:-1]
