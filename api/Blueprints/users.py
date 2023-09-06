@@ -18,7 +18,8 @@ def read_all_users():
     Returns the following table
     user_id | email | first_name | last_name
     """
-    return read("Read Users")
+    sql = "SELECT user_id, email, first_name, last_name FROM Users"
+    return read(sql)
 
 @users_bp.route('/read-one', methods=['GET'])
 def read_one_user():
@@ -26,7 +27,14 @@ def read_one_user():
     Returns the following table
     user_id | email | first_name | last_name
     """
-    return read("Read Users", "one")
+    token_status = validate_token(request)
+    try:
+        user_id = token_status['user_id']
+    except KeyError:
+        return validate_token(request)
+
+    sql = f"SELECT user_id, email, first_name, last_name FROM Users WHERE user_id = {user_id}"
+    return read(sql, 'one')
 
 @users_bp.route('/login', methods=['POST'])
 def login():
@@ -36,9 +44,8 @@ def login():
     # Validate User
     user = request.get_json()
     sql = f"SELECT user_id FROM Users WHERE email = '{user['email']}' AND password = '{user['password']}'"
-    headers = ['user_id']
     try:
-        user_id = read(sql, headers, 'one')['user_id']
+        user_id = read(sql, 'one')['user_id']
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
