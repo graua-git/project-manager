@@ -27,13 +27,20 @@ export default function Homepage() {
         })
             .then((response) => response.json())
             .then((data) => {
-                localStorage.setItem('token', data.token);
-                console.log("Login successful");
-                console.log(localStorage.getItem('token'));
-                navigate('/home')
+                if (data.hasOwnProperty("error")) {
+                    console.error("Error during login:", data.error);
+                    localStorage.setItem('token', '');
+                    console.log(data)
+                } else {
+                    localStorage.setItem('token', data.token);
+                    console.log("Login successful");
+                    console.log(localStorage.getItem('token'));
+                    navigate('/home')
+                }
             })
             .catch((error) => {
                 console.error("Error during login:", error);
+                localStorage.setItem('token', '');
             });
     }
 
@@ -45,7 +52,6 @@ export default function Homepage() {
             <input type="text" name="password" placeholder="Password" value={formData.password} onChange={handleFormChange} required />
             <br />
             <button type="submit">Login</button>
-
         </form>
     )
 }
