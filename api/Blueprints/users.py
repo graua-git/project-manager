@@ -13,7 +13,7 @@ def create_user():
     return create(request.get_json(), "Users")
 
 @users_bp.route('/read-all', methods=['GET'])
-def read_users():
+def read_all_users():
     """
     Returns the following table
     user_id | email | first_name | last_name
@@ -21,7 +21,7 @@ def read_users():
     return read("Read Users")
 
 @users_bp.route('/read-one', methods=['GET'])
-def read_users():
+def read_one_user():
     """
     Returns the following table
     user_id | email | first_name | last_name
@@ -46,7 +46,7 @@ def login():
     token = generate_token(user_id)
     return jsonify({'token': token})
 
-@users_bp.route('/update', methods=['POST'])
+@users_bp.route('/update', methods=['PUT'])
 def update_user():
     """
     Updates user with id from token given data from json

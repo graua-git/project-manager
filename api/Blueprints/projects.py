@@ -13,7 +13,7 @@ def create_project():
     return create(request.get_json(), "Projects")
 
 @projects_bp.route('/read-all', methods=['GET'])
-def read_projects():
+def read_all_projects():
     """
     Returns the following table
     project_id | email | first_name | last_name
@@ -21,7 +21,7 @@ def read_projects():
     return read("Read Projects")
 
 @projects_bp.route('/read-one', methods=['GET'])
-def read_projects():
+def read_one_project():
     """
     Returns the following table
     project_id | email | first_name | last_name
