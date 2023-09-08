@@ -1,4 +1,5 @@
-from flask import jsonify
+from flask import request, jsonify
+from functools import wraps
 import jwt
 import json
 from datetime import datetime, timedelta
@@ -22,6 +23,24 @@ def read_key():
     with open(location, 'r') as json_file:
         data = json.load(json_file)
     return data['key']
+
+def token_required(func):
+    """
+    Decorator for validating user token
+    ENSURE INNER FUNCTIONS FIRST PARAMETER IS user_id
+    request: HTTP request with token as a header
+    """
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        token_status = validate_token(request)
+        try:
+            user_id = token_status['user_id']
+            request.user_id = user_id
+            return func(*args, **kwargs)
+        except Exception as e:
+            return token_status
+        
+    return decorated_function  
 
 def validate_token(request):
     """
