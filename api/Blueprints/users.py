@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 
-from Authentication.authentication import generate_token, validate_token
+from Authentication.authentication import generate_token, token_required
 from Database.crud import create, read, update, delete
 
 users_bp = Blueprint('users', __name__)
@@ -22,16 +22,13 @@ def read_all_users():
     return read(sql)
 
 @users_bp.route('/read-one', methods=['GET'])
+@token_required
 def read_one_user():
     """
     Returns the following table
     user_id | email | first_name | last_name
     """
-    token_status = validate_token(request)
-    try:
-        user_id = token_status['user_id']
-    except KeyError:
-        return validate_token(request)
+    user_id = request.user_id
 
     sql = f"SELECT user_id, email, first_name, last_name FROM Users WHERE user_id = {user_id}"
     return read(sql, 'one')
@@ -54,31 +51,24 @@ def login():
     return jsonify({'token': token})
 
 @users_bp.route('/update', methods=['PUT'])
+@token_required
 def update_user():
     """
     Updates user with id from token given data from json
     """
-    # Validate token
-    token_status = validate_token(request)
-    try:
-        user_id = token_status['user_id']
-    except KeyError:
-        return validate_token(request)
+    user_id = request.user_id
 
     # Query database
     return update(request.get_json(), "Users", user_id)
 
 @users_bp.route('/delete', methods=['DELETE'])
+@token_required
 def delete_user():
     """
     Deletes user with id from token
     """
     # Validate token
-    token_status = validate_token(request)
-    try:
-        user_id = token_status['user_id']
-    except KeyError:
-        return validate_token(request)
-
+    user_id = request.user_id
+        
     # Query database
     return delete(request.get_json(), "Users", user_id)

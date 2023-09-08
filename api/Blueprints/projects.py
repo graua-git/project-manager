@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 
-from Authentication.authentication import generate_token, validate_token
+from Authentication.authentication import token_required
 from Database.crud import create, read, update, delete
 
 projects_bp = Blueprint('projects', __name__)
@@ -29,18 +29,15 @@ def read_one_project():
     return read(f"SELECT * FROM Projects WHERE project_id = {id}", "one")
 
 @projects_bp.route('/myprojects', methods=['GET'])
+@token_required
 def read_myprojects():
     """
     Returns the projects belonging to a specific user
     project | creator
     """
-    token_status = validate_token(request)
-    try:
-        user_id = token_status['user_id']
-    except KeyError:
-        return validate_token(request)
-    
-    sql = f"SELECT name, owner \
+    user_id = request.user_id
+
+    sql = f"SELECT project_id, name, owner \
             FROM Projects \
             JOIN Memberships ON Memberships.project = Projects.project_id \
             JOIN Users ON Users.user_id = Memberships.user \
