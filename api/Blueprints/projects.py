@@ -18,7 +18,7 @@ def read_all_projects():
     Returns the following table
     project_id | email | first_name | last_name
     """
-    return read("Read Projects")
+    return read("SELECT * FROM Projects")
 
 @projects_bp.route('/read-one', methods=['GET'])
 def read_one_project():
