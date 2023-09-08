@@ -10,7 +10,7 @@ DELETE FROM Users WHERE user_id = {id};
 SELECT * FROM Projects;
 
 -- Read My Projects
-SELECT name, owner
+SELECT project_id, name, owner
 FROM Projects
 JOIN Memberships ON Memberships.project = Projects.project_id
 JOIN Users ON Users.user_id = Memberships.user
