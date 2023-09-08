@@ -3,6 +3,7 @@ import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage"
 import HomePage from "./pages/HomePage";
 import CreateAccountPage from "./pages/CreateAccountPage";
+import ProjectPage from "./pages/ProjectPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route exact path="/home" element={<HomePage />} />
           <Route exact path="/login" element={<LoginPage />} />
           <Route exact path="/create-account" element={<CreateAccountPage />} />
+          <Route exact path="/project/:id" element={<ProjectPage />} />
         </Routes>
       </div>
     </Router>
