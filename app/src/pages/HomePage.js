@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ProjectsTable from '../components/ProjectsTable';
 
-export default function Homepage() {
+export default function HomePage() {
     const [user, setUser] = useState([]);
     const [greeting, setGreeting] = useState([]);
     const [projects, setProjects] = useState([]);
