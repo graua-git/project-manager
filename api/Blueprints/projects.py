@@ -20,13 +20,16 @@ def read_all_projects():
     """
     return read("SELECT * FROM Projects")
 
-@projects_bp.route('/read-one', methods=['GET'])
-def read_one_project():
+@projects_bp.route('/read-one/<int:project_id>', methods=['GET'])
+@token_required
+def read_one_project(project_id):
     """
     Returns the following table
     project_id | email | first_name | last_name
     """
-    return read(f"SELECT * FROM Projects WHERE project_id = {id}", "one")
+    user_id = request.user_id
+    return read(f"SELECT * FROM Projects WHERE project_id = {project_id} AND EXISTS \
+                (SELECT * FROM Memberships WHERE project = {project_id} AND user = {user_id})", "one")
 
 @projects_bp.route('/myprojects', methods=['GET'])
 @token_required
