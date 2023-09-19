@@ -5,9 +5,14 @@ SELECT user_id, email, first_name, last_name FROM Users;
 -- Delete User
 DELETE FROM Users WHERE user_id = {id};
 
+
 -- Projects
 -- Read Projects
 SELECT * FROM Projects;
+
+-- Read One Project
+SELECT * FROM Projects WHERE project_id = {project_id} AND EXISTS
+(SELECT * FROM Memberships WHERE project = {project_id} AND user = {user_id})
 
 -- Read My Projects
 SELECT project_id, name, owner
