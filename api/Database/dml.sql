@@ -25,9 +25,17 @@ JOIN Users ON Users.user_id = Memberships.user
 WHERE creator = 1) as Creators ON Projects.project_id = Creators.project
 WHERE Users.user_id = {user_id};
 
+
 -- Memberships
 -- Read Memberships
 SELECT membership_id, CONCAT(first_name, ' ', last_name) AS participant_name, email, name AS project, creator
 FROM Memberships
 JOIN Users ON Users.user_id = Memberships.user
 JOIN Projects on Projects.project_id = Memberships.project;
+
+
+-- Tasks
+-- Read Tasks By Project
+SELECT * FROM Tasks WHERE project = {project_id} AND EXISTS 
+(SELECT * FROM Memberships WHERE project = {project_id} AND user = {user_id})
+ORDER BY date_created DESC, time_created;
